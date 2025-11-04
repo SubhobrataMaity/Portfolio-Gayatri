@@ -1,0 +1,117 @@
+📁 HOW TO STRUCTURE YOUR PROJECTS
+=====================================
+
+Copy this structure for your projects:
+
+
+📁 /public/projects/
+│
+├── 📁 SoFI/                          ← Project 1
+│   ├── 🖼️ 1.png                      ← First image (becomes thumbnail)
+│   ├── 🖼️ 2.png                      ← Second image
+│   ├── 🎬 3.gif                      ← Animation
+│   ├── 🖼️ 4.png                      ← Fourth image
+│   └── 🖼️ 5.png                      ← Fifth image
+│
+├── 📁 AirbnbRedesign/                ← Project 2
+│   ├── 🖼️ cover.png                  ← Custom thumbnail (optional)
+│   ├── 🖼️ hero.png                   ← Hero section
+│   ├── 🖼️ research.png               ← Research findings
+│   ├── 🖼️ wireframes.png             ← Wireframes
+│   ├── 🖼️ mockups.png                ← High-fidelity mockups
+│   └── 🎬 demo.gif                   ← Prototype demo
+│
+├── 📁 FoodAppUI/                     ← Project 3
+│   ├── 🖼️ 1.png                      ← Splash screen
+│   ├── 🖼️ 2.png                      ← Onboarding
+│   ├── 🖼️ 3.png                      ← Home screen
+│   ├── 🎬 4.gif                      ← Interactions
+│   └── 🖼️ 5.png                      ← Final screens
+│
+└── 📁 YourProjectName/               ← Add your own!
+    ├── 🖼️ 1.png
+    ├── 🖼️ 2.png
+    └── 🎬 3.gif
+
+
+NAMING RULES:
+=============
+
+✅ DO:
+- Use numbers: 1.png, 2.png, 3.png
+- Use letters: a-hero.png, b-screens.png
+- Use descriptive names: cover.png, thumbnail.png
+- Keep files under 1MB
+
+❌ DON'T:
+- Use random names: image.png, photo.png
+- Use special characters: @#$%
+- Use very long names
+
+
+WHAT HAPPENS:
+=============
+
+When you create: /public/projects/SoFI/
+
+You automatically get:
+✅ Card on /projects page
+✅ Detail page at /projects/SoFI
+✅ Thumbnail from first image
+✅ Title "SoFI" (formatted from folder name)
+✅ All images in order
+✅ Smooth animations
+✅ Responsive design
+✅ Theme support
+
+
+SUPPORTED FILES:
+================
+
+Images:  .png .jpg .jpeg .webp .svg
+Videos:  .gif .mp4 .webm .mov
+
+
+QUICK START:
+============
+
+1. Create folder: /public/projects/MyProject/
+2. Add images: 1.png, 2.png, 3.png
+3. Visit: http://localhost:3000/projects
+4. Done! 🎉
+
+
+TIPS:
+=====
+
+💡 First image = thumbnail (or use cover.png)
+💡 Files display in alphabetical order
+💡 Folder name = project title
+💡 No code changes needed!
+💡 Changes appear instantly (refresh browser)
+
+
+EXAMPLE FOLDER NAMES:
+=====================
+
+SoFI                → "SoFI"
+AirbnbRedesign      → "Airbnb Redesign"
+FoodAppUI           → "Food App UI"
+my-awesome-project  → "My Awesome Project"
+E_Commerce_App      → "E Commerce App"
+
+
+READY TO START?
+===============
+
+1. Delete the _EXAMPLE_PROJECT folder
+2. Create your first project folder
+3. Add your design files
+4. Refresh /projects page
+5. See your work shine! ✨
+
+
+Need help? Check:
+- QUICK_START.md
+- DYNAMIC_PORTFOLIO_GUIDE.md
+- PORTFOLIO_SYSTEM_SUMMARY.md

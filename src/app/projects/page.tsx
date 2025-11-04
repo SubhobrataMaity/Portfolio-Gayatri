@@ -1,88 +1,46 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Filter, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
+import { Folder } from 'lucide-react';
 
-const ProjectsPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+/**
+ * Dynamic Projects Gallery Page
+ * 
+ * Automatically detects all folders in /public/projects/ and generates
+ * a gallery card for each project.
+ * 
+ * HOW TO ADD NEW PROJECTS:
+ * 1. Create a new folder in /public/projects/ (e.g., /public/projects/MyNewProject/)
+ * 2. Add your PNG/GIF files to that folder (they will be sorted alphabetically)
+ * 3. The first image (or cover.png/1.png) will be used as the thumbnail
+ * 4. The project will automatically appear on this page with its own detail page
+ * 
+ * No code changes needed! Just drop in folders with images.
+ */
 
-  const categories = ['All', 'Web', 'Mobile', 'Branding'];
+// Import project data - this will be fetched from API route
+interface ProjectData {
+  slug: string;
+  title: string;
+  description?: string;
+  thumbnail: string;
+  assets: { type: string; src: string }[];
+}
 
-  const projects = [
-    {
-      id: 1,
-      title: 'App Redesign',
-      description: 'A complete redesign of a mobile banking app focusing on user experience and accessibility.',
-      longDescription: 'Led the complete redesign of a mobile banking application, improving user flows and implementing accessibility standards. The project resulted in a 40% increase in user engagement.',
-      role: 'Lead Designer',
-      tools: ['Figma', 'Protopie', 'Adobe XD'],
-      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop',
-      category: 'Mobile',
-      year: '2024',
-    },
-    {
-      id: 2,
-      title: 'Dashboard Concept',
-      description: 'Modern analytics dashboard with data visualization and real-time insights.',
-      longDescription: 'Designed a comprehensive analytics dashboard for enterprise clients, featuring real-time data visualization and customizable widgets.',
-      role: 'UI/UX Designer',
-      tools: ['Figma', 'Sketch', 'Principle'],
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-      category: 'Web',
-      year: '2024',
-    },
-    {
-      id: 3,
-      title: 'E-commerce UI Revamp',
-      description: 'Refreshed e-commerce platform with improved checkout flow and product discovery.',
-      longDescription: 'Revamped the entire e-commerce experience, reducing cart abandonment by 35% through improved UX patterns and streamlined checkout.',
-      role: 'Product Designer',
-      tools: ['Figma', 'Framer', 'After Effects'],
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-      category: 'Web',
-      year: '2023',
-    },
-    {
-      id: 4,
-      title: 'Fitness App UI',
-      description: 'Health and fitness tracking app with personalized workout plans.',
-      longDescription: 'Created an engaging fitness app interface with gamification elements and social features to keep users motivated.',
-      role: 'UI/UX Designer',
-      tools: ['Figma', 'Principle', 'Lottie'],
-      image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=600&fit=crop',
-      category: 'Mobile',
-      year: '2023',
-    },
-    {
-      id: 5,
-      title: 'Brand Identity System',
-      description: 'Complete brand identity design for a sustainable fashion startup.',
-      longDescription: 'Developed a comprehensive brand identity including logo, color palette, typography, and brand guidelines for an eco-friendly fashion brand.',
-      role: 'Brand Designer',
-      tools: ['Illustrator', 'Photoshop', 'InDesign'],
-      image: 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=800&h=600&fit=crop',
-      category: 'Branding',
-      year: '2023',
-    },
-    {
-      id: 6,
-      title: 'SaaS Platform Design',
-      description: 'Enterprise SaaS platform for project management and collaboration.',
-      longDescription: 'Designed a scalable design system and interface for a project management platform used by Fortune 500 companies.',
-      role: 'Lead Product Designer',
-      tools: ['Figma', 'FigJam', 'Miro'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop',
-      category: 'Web',
-      year: '2024',
-    },
-  ];
+export default function ProjectsPage() {
+  // For now, use empty array - will be populated via API or static props
+  const [projects, setProjects] = React.useState<ProjectData[]>([]);
 
-  const filteredProjects =
-    selectedCategory === 'All'
-      ? projects
-      : projects.filter((project) => project.category === selectedCategory);
+  React.useEffect(() => {
+    // Fetch projects from API route
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => setProjects(data))
+      .catch(err => console.error('Error loading projects:', err));
+  }, []);
 
   return (
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
@@ -103,162 +61,133 @@ const ProjectsPage = () => {
           </p>
         </motion.div>
 
-        {/* Filter Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
-        >
-          <div className="flex items-center gap-2 text-light-textSecondary dark:text-dark-textSecondary">
-            <Filter size={20} />
-            <span className="font-medium">Filter:</span>
-          </div>
-          {categories.map((category) => (
-            <motion.button
-              key={category}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
-                selectedCategory === category
-                  ? 'bg-light-accent dark:bg-dark-accent text-white dark:text-dark-bg shadow-lg'
-                  : 'bg-light-accent/10 dark:bg-dark-accent/10 text-light-text dark:text-dark-text hover:bg-light-accent/20 dark:hover:bg-dark-accent/20'
-              }`}
-            >
-              {category}
-            </motion.button>
-          ))}
-        </motion.div>
-
         {/* Projects Grid */}
-        <AnimatePresence mode="wait">
+        {projects.length > 0 ? (
           <motion.div
-            key={selectedCategory}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {filteredProjects.map((project, index) => (
+            {projects.map((project, index) => (
               <motion.div
-                key={project.id}
+                key={project.slug}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
                 className="group cursor-pointer"
               >
-                <div className="neumorphic-card dark:dark-card overflow-hidden h-full transition-all duration-300">
-                  <div className="relative h-64 overflow-hidden">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent 
-                                  opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                                  flex items-end justify-center pb-6">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full 
-                                 bg-white dark:bg-dark-bg text-light-text dark:text-dark-text
-                                 font-medium text-sm shadow-lg"
-                      >
-                        View Details
-                        <ExternalLink size={16} />
-                      </motion.button>
+                <Link href={`/projects/${project.slug}`}>
+                  <div className="neumorphic-card dark:dark-card overflow-hidden h-full transition-all duration-300
+                                hover:shadow-glass-light-hover dark:hover:shadow-glow-cyan
+                                border-2 border-transparent hover:border-light-accent dark:hover:border-dark-accent">
+                    {/* Thumbnail */}
+                    <div className="relative h-64 overflow-hidden bg-light-bg dark:bg-dark-bg">
+                      <Image
+                        src={project.thumbnail}
+                        alt={project.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      {/* Overlay on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent 
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300 
+                                    flex items-center justify-center">
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="px-6 py-3 rounded-full 
+                                   bg-white dark:bg-dark-accent text-light-text dark:text-dark-bg
+                                   font-medium text-sm shadow-lg"
+                        >
+                          View Project
+                        </motion.div>
+                      </div>
                     </div>
-                    <div className="absolute top-4 right-4 flex gap-2">
-                      <span className="px-3 py-1 rounded-full text-xs font-medium
-                                     bg-white/90 dark:bg-dark-bg/90 text-light-text dark:text-dark-text">
-                        {project.category}
-                      </span>
-                      <span className="px-3 py-1 rounded-full text-xs font-medium
-                                     bg-light-accent/90 dark:bg-dark-accent/90 text-white dark:text-dark-bg">
-                        {project.year}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-2 text-light-text dark:text-dark-text">
-                      {project.title}
-                    </h3>
-                    <p className="text-light-textSecondary dark:text-dark-textSecondary mb-4 line-clamp-2">
-                      {project.description}
-                    </p>
-                    <div className="mb-4">
-                      <p className="text-sm font-medium text-light-accent dark:text-dark-accent mb-2">
-                        {project.role}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tools.map((tool) => (
-                          <span
-                            key={tool}
-                            className="px-3 py-1 text-xs rounded-full
-                                     bg-light-accent/10 dark:bg-dark-accent/10
-                                     text-light-text dark:text-dark-text"
-                          >
-                            {tool}
-                          </span>
-                        ))}
+                    
+                    {/* Project Info */}
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold mb-2 text-light-text dark:text-dark-text
+                                   group-hover:text-light-accent dark:group-hover:text-dark-accent
+                                   transition-colors duration-300">
+                        {project.title}
+                      </h3>
+                      {project.description && (
+                        <p className="text-light-textSecondary dark:text-dark-textSecondary line-clamp-2">
+                          {project.description}
+                        </p>
+                      )}
+                      <div className="mt-4 flex items-center gap-2 text-sm text-light-accent dark:text-dark-accent">
+                        <Folder size={16} />
+                        <span>{project.assets.length} assets</span>
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </motion.div>
-        </AnimatePresence>
-
-        {/* Empty State */}
-        {filteredProjects.length === 0 && (
+        ) : (
+          /* Empty State - No Projects Found */
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
-            <p className="text-xl text-light-textSecondary dark:text-dark-textSecondary">
-              No projects found in this category.
-            </p>
+            <div className="neumorphic-card dark:dark-card p-12 max-w-2xl mx-auto">
+              <Folder size={64} className="mx-auto mb-6 text-light-textSecondary dark:text-dark-textSecondary" />
+              <h2 className="text-2xl font-bold mb-4 text-light-text dark:text-dark-text">
+                No Projects Yet
+              </h2>
+              <p className="text-light-textSecondary dark:text-dark-textSecondary mb-6">
+                Add your first project by creating a folder in <code className="px-2 py-1 rounded bg-light-accent/10 dark:bg-dark-accent/10">/public/projects/</code>
+              </p>
+              <div className="text-left max-w-md mx-auto space-y-2 text-sm text-light-textSecondary dark:text-dark-textSecondary">
+                <p><strong>Example:</strong></p>
+                <ol className="list-decimal list-inside space-y-1 ml-4">
+                  <li>Create folder: <code className="px-1 rounded bg-light-accent/10 dark:bg-dark-accent/10">/public/projects/MyProject/</code></li>
+                  <li>Add images: <code className="px-1 rounded bg-light-accent/10 dark:bg-dark-accent/10">1.png, 2.png, 3.gif</code></li>
+                  <li>Refresh this page - your project will appear automatically!</li>
+                </ol>
+              </div>
+            </div>
           </motion.div>
         )}
 
         {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-20 text-center"
-        >
-          <div className="neumorphic-card dark:dark-card p-12 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Interested in working together?
-            </h2>
-            <p className="text-lg text-light-textSecondary dark:text-dark-textSecondary mb-8">
-              I'm always open to discussing new projects and creative ideas.
-            </p>
-            <motion.a
-              href="/about#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 py-3 rounded-full font-medium text-lg
-                         border-2 border-light-accent dark:border-dark-accent
-                         text-light-accent dark:text-dark-accent
-                         hover:bg-light-accent/10 dark:hover:bg-dark-accent/10
-                         transition-all duration-300 "
-            >
-              Get in Touch
-            </motion.a>
-          </div>
-        </motion.div>
+        {projects.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mt-20 text-center"
+          >
+            <div className="neumorphic-card dark:dark-card p-12 max-w-3xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Interested in working together?
+              </h2>
+              <p className="text-lg text-light-textSecondary dark:text-dark-textSecondary mb-8">
+                I'm always open to discussing new projects and creative ideas.
+              </p>
+              <motion.a
+                href="/about#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-block px-6 py-3 rounded-full font-medium text-lg
+                           border-2 border-light-accent dark:border-dark-accent
+                           text-light-accent dark:text-dark-accent
+                           hover:bg-light-accent/10 dark:hover:bg-dark-accent/10
+                           transition-all duration-300"
+              >
+                Get in Touch
+              </motion.a>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );
-};
-
-export default ProjectsPage;
+}
