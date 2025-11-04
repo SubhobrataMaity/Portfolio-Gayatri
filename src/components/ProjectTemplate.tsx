@@ -74,7 +74,7 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({ title, description, a
         </motion.div>
 
         {/* Project Assets */}
-        <div className="space-y-12 md:space-y-16">
+        <div className="space-y-0">
           {assets.map((asset, index) => {
             // Check if it's a GIF file
             const isGif = asset.src.toLowerCase().endsWith('.gif');
@@ -93,7 +93,7 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({ title, description, a
                 className="w-full"
               >
                 {asset.type === 'image' ? (
-                  <div className="relative w-full rounded-2xl overflow-hidden shadow-glass-light dark:shadow-glass-dark
+                  <div className="relative w-full overflow-hidden
                                 bg-light-card dark:bg-dark-card">
                     {isGif ? (
                       // Use regular img tag for GIFs to preserve animation
@@ -119,7 +119,7 @@ const ProjectTemplate: React.FC<ProjectTemplateProps> = ({ title, description, a
                     )}
                   </div>
                 ) : (
-                  <div className="relative w-full rounded-2xl overflow-hidden shadow-glass-light dark:shadow-glass-dark
+                  <div className="relative w-full overflow-hidden
                                 bg-light-card dark:bg-dark-card">
                     <video
                       src={asset.src}
